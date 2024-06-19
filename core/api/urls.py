@@ -34,4 +34,7 @@ urlpatterns = [
     path('primaryschool-onlineregister-create/', views.PrimarySchoolOnlineRegisterCreateAPIView.as_view(), name="primaryschool-onlineregister-create"),
     path("edition-list/", views.EditionListAPIView.as_view(), name="edition-list"),
     path("edition-retrieve/<int:id>/", views.EditionRetrieveAPIView.as_view(), name="edition-retrieve"),
+    path("partners-list/", views.PartnersListAPIView.as_view(), name="partner-list"),
+    path("contact-us/", views.ContactUsCreateAPIView.as_view(), name="contact-us"),
+
 ]

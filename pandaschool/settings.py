@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,9 +44,26 @@ INSTALLED_APPS = [
     'rest_framework',
     'ckeditor',
     'corsheaders',
+    'ckeditor_uploader',
 
+    'account.apps.AccountConfig',
+    'accounting.apps.AccountingConfig',
     'core.apps.CoreConfig',
+    'exam.apps.ExamConfig',
+    'service.apps.ServiceConfig',
+    'notification.apps.NotificationConfig',
 ]
+
+CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "full",
+        "height": 300,
+        "width": 300,
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -90,6 +108,8 @@ DATABASES = {
 }
 
 
+AUTH_USER_MODEL = 'account.CustomUser'
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -112,11 +132,20 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+        'rest_framework.permissions.AllowAny'
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    "DATE_INPUT_FORMATS": ["%d-%m-%Y"],
 }
 
-
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(weeks=4),
+    "UPDATE_LAST_LOGIN": True,
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -134,11 +163,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-# STATIC_ROOT = 'static/'
+STATIC_ROOT = 'static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static'
-]
+# STATICFILES_DIRS = [
+#     BASE_DIR / 'static'
+# ]
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media/'

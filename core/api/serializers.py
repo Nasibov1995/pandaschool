@@ -8,7 +8,7 @@ from core.models import (
     AbiturientOnlineRegister, MasterOnlineRegister, MIQOnlineRegister,
     CivilServiceOnlineRegister, ComputerCourseOnlineRegister, ForeignLanguageOnlineRegister,
     AccountingOnlineRegister, HighSchoolOnlineRegister, PreSchoolOnlineRegister,
-    PrimarySchoolOnlineRegister, EditionModel,
+    PrimarySchoolOnlineRegister, EditionModel, Partners, ContactUs
 )
 
 
@@ -185,4 +185,16 @@ class PrimarySchoolOnlineRegisterSerializer(serializers.ModelSerializer):
 class EditionSerializer(serializers.ModelSerializer):
     class Meta:
         model = EditionModel
+        fields = "__all__"
+
+
+class PartnersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Partners
+        fields = "__all__"
+
+
+class ContactUsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactUs
         fields = "__all__"

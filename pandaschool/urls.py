@@ -18,11 +18,20 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/", include("core.api.urls")),
+    path("api/auth/token/", TokenObtainPairView.as_view()),
+    path("api/refresh/token/", TokenRefreshView.as_view()),
+    path("api/account/", include("account.api.urls")),
+    path("api/accounting/", include("accounting.api.urls")),
+    path("api/site/", include("core.api.urls")),
+    path("api/exam/", include("exam.api.urls")),
+    path("api/service/", include("service.api.urls")),
+    path("api/notification/", include("notification.api.urls")),
+    path("ckeditor/", include("ckeditor_uploader.urls")),
 ]
 
-urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_ROOT) 
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

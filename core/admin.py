@@ -1,14 +1,14 @@
 from django.contrib import admin, messages
 from core.models import (
-    SettingsModel, BannerModel, ContactInformationModel,
+    ContactUs, SettingsModel, BannerModel, ContactInformationModel,
     SocialMediaModel, NewsModel, VideoGalleryModel,
     PhotoGalleryModel, PhotoGalleryItem, TeacherModel, ServiceModel,
     BranchModel, BranchContactNumberModel, SuccessModel,
-    SuccessItemModel, ResumeModel, ContactModel, 
+    SuccessItemModel, ResumeModel, ContactModel, TeacherOnlineRegister,
     AbiturientOnlineRegister, MasterOnlineRegister, MIQOnlineRegister,
     CivilServiceOnlineRegister, ComputerCourseOnlineRegister, AccountingOnlineRegister,
     ForeignLanguageOnlineRegister, HighSchoolOnlineRegister, PreSchoolOnlineRegister,
-    PrimarySchoolOnlineRegister, EditionModel
+    PrimarySchoolOnlineRegister, EditionModel, Partners
 )
 from django.contrib.admin.sites import AdminSite
 
@@ -201,6 +201,14 @@ class ResumeAdmin(admin.ModelAdmin):
 @admin.register(ContactModel)
 class ContactAdmin(admin.ModelAdmin):
     readonly_fields = ("name", "email", "subject", "message")
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+@admin.register(TeacherOnlineRegister)
+class TeacherOnlineRegisterAdmin(admin.ModelAdmin):
+    readonly_fields = ("full_name", "email", "mobile_number",
+    "identity_card_number", "speciality", "section", 'status')
 
     def has_add_permission(self, request, obj=None):
         return False
@@ -411,7 +419,23 @@ class EditionAdmin(admin.ModelAdmin):
         updated = queryset.update(is_active=False)
         self.message_user(request, "Seçilmiş elementlər deaktivləşdirildi.", messages.SUCCESS)
 
+@admin.register(Partners)
+class PartnersAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "is_active")
 
+    actions = ['get_activated', 'get_deactivated']
+
+    @admin.action(description="Aktiv et")
+    def get_activated(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(request, "Seçilmiş elementlər aktivləşdirildi.", messages.SUCCESS)
+
+    @admin.action(description="Deaktiv et")
+    def get_deactivated(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(request, "Seçilmiş elementlər deaktivləşdirildi.", messages.SUCCESS)
+        
+admin.site.register(ContactUs)
 # def get_app_list(self, request, app_label=None):
 #         app_dict = self._build_app_dict(request)
 #         app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())

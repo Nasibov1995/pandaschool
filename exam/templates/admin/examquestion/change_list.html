@@ -1,0 +1,110 @@
+{% extends "admin/change_list.html" %} 
+
+{% block content %}
+    <style>
+        #exams-tabs {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        #exams-tabs ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        #exams-tabs li {
+            margin-right: 10px;
+        }
+
+        #exams-tabs #exam_name {
+            text-decoration: none;
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #exams-tabs #exam_name:hover {
+            background-color: #2980b9;
+        }
+
+        #exams-tabs div {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .exam-content {
+            display: none;
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#exams-tabs div:first').show();
+
+            $('#exams-tabs #exam_name').click(function (e) {
+                e.preventDefault();
+
+                $('.exam-content').hide();
+
+                $($(this).attr('href')).show();
+            });
+        });
+    </script>
+
+    <div id="exams-tabs">
+        <ul>
+            {% for exam in exams %}
+                <li><a href="#{{ exam.exam_name_slug }}-{{exam.variant}}" id="exam_name">{{ exam.exam_name }} - {{ exam.variant }}</a></li>
+            {% endfor %}
+        </ul>
+        {% for exam in exams %}
+            <div id="{{ exam.exam_name_slug }}-{{exam.variant}}"class="exam-content">
+                <h2>{{ exam.exam_name }} - Variant {{ exam.variant }}</h2>
+                <table>
+                    <tbody>
+                        {% for question in exam.questions.all %} 
+                            <tr>
+                                <td><a href="{% url 'admin:exam_examquestion_change' question.pk %}">{{ question }}</a></td>
+                            </tr>
+                        {% endfor %} 
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
